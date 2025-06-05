@@ -1,0 +1,27 @@
+[
+  {
+    "id": "ISDS",
+    "zkratka": "ISDS",
+    "nazev": "Informační systém datových schránek"
+  },
+  {
+    "id": "ISSS",
+    "zkratka": "ISSS",
+    "nazev": "Informační systém statistiky a reportingu"
+  },
+  {
+    "id": "Portál občana",
+    "zkratka": "Portál občana",
+    "nazev": "Portál občana České republiky"
+  },
+  {
+    "id": "eDoklady",
+    "zkratka": "eDoklady",
+    "nazev": "Elektronické doklady"
+  },
+  {
+    "id": "e-Legislativa",
+    "zkratka": "e-Legislativa",
+    "nazev": "Systém elektronické legislativy"
+  }
+]
