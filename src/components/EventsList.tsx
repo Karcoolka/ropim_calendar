@@ -373,7 +373,7 @@ export const EventsList: React.FC<EventsListProps> = ({
                   )}
                 </div>
 
-                {/* Additional info */}
+                {/* Additional info
                 {(event.url_udalosti || event.kontaktni_osoba) && (
                   <div style={styles.additionalInfo}>
                     {event.url_udalosti && (
@@ -392,7 +392,7 @@ export const EventsList: React.FC<EventsListProps> = ({
                       </span>
                     )}
                   </div>
-                )}
+                )} */}
               </div>
             </div>
           );
