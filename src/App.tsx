@@ -9,7 +9,8 @@ function App() {
   const [filteredEvents, setFilteredEvents] = useState<Event[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-  const [activeScreen, setActiveScreen] = useState<'seznam' | 'kalendar'>('seznam');
+  const [activeScreen, setActiveScreen] = useState<'seznam' | 'kalendar' | 'detail'>('seznam');
+  const [selectedEvent, setSelectedEvent] = useState<Event | null>(null);
   
   const [filters, setFilters] = useState<Filters>({
     search: '',
@@ -235,8 +236,6 @@ function App() {
             <span style={styles.breadcrumbCurrent}>Plánované události ve veřejné správě</span>
           </div>
           
-          <h1 style={styles.title}>Plánované události</h1>
-          
           <div style={styles.navigation}>
             <button
               onClick={() => setActiveScreen('seznam')}
@@ -308,22 +307,6 @@ function App() {
                   </div>
                 )}
                 
-                {/* Events count info */}
-                <div style={styles.resultsInfo}>
-                  <span style={styles.eventCount}>{filteredEvents.length} událostí</span>
-                  <div style={styles.sortingSection}>
-                    <span style={styles.sortLabel}>Řazení:</span>
-                    <select 
-                      style={styles.sortSelect}
-                      value={sortOrder}
-                      onChange={(e) => setSortOrder(e.target.value as 'newest' | 'oldest')}
-                    >
-                      <option value="newest">Od nejnovějších</option>
-                      <option value="oldest">Od nejstarších</option>
-                    </select>
-                  </div>
-                </div>
-                
                 {error && (
                   <div style={styles.errorMessage}>
                     {error}
@@ -334,9 +317,11 @@ function App() {
                   events={filteredEvents}
                   loading={loading}
                   onEventClick={(event) => {
-                    // For now, we'll just log the event
-                    console.log('Event clicked:', event);
+                    setSelectedEvent(event);
+                    setActiveScreen('detail');
                   }}
+                  sortOrder={sortOrder}
+                  onSortOrderChange={setSortOrder}
                 />
               </div>
             </>
@@ -544,7 +529,19 @@ const styles = {
     borderRadius: '8px',
     padding: '20px',
     minHeight: '400px'
-  }
+  },
+  headerTitle: {
+    margin: '0',
+    fontSize: '24px',
+    fontWeight: '600',
+    color: '#333'
+  },
+  headerCount: {
+    marginTop: '20px',
+    fontSize: '14px',
+    color: '#666',
+    fontWeight: '500'
+  },
 };
 
 export default App;

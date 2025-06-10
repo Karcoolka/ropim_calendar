@@ -267,7 +267,7 @@
     "url_udalosti": "www.zcu.cz",
     "kategorie_id": 0.0,
     "kategorie_nazev": "Událost ISVS",
-    "kategorie_rizika": "",
+    "kategorie_rizika": "B",
     "je_aktivni_zaznam": "NE",
     "je_verejny": "NE",
     "dopad_do_systemu": "NE",
@@ -283,8 +283,8 @@
     "dodavatel": "NAKIT",
     "prostredi": "Testovací",
     "stav_udalosti": "Realizováno",
-    "typ_odstavo_udalosti": "Odstávka",
-    "dopad_na_ostatni_systemy": "Činnosti neomezí ani nezvýší zátěž na NIA TEST.",
+    "typ_odstavo_udalosti": "Odstávky",
+    "dopad_na_ostatni_systemy": "RPP ROS SZR",
     "id_service_desk": "201585"
   },
   {

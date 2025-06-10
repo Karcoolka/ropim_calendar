@@ -5,9 +5,17 @@ interface EventsListProps {
   events: Event[];
   loading: boolean;
   onEventClick: (event: Event) => void;
+  sortOrder: 'newest' | 'oldest';
+  onSortOrderChange: (order: 'newest' | 'oldest') => void;
 }
 
-export const EventsList: React.FC<EventsListProps> = ({ events, loading, onEventClick }) => {
+export const EventsList: React.FC<EventsListProps> = ({ 
+  events, 
+  loading, 
+  onEventClick,
+  sortOrder,
+  onSortOrderChange 
+}) => {
   if (loading) {
     return (
       <div style={styles.loadingContainer}>
@@ -52,24 +60,81 @@ export const EventsList: React.FC<EventsListProps> = ({ events, loading, onEvent
   };
 
   const getCategoryTag = (category: string) => {
+    console.log('Rendering category tag:', category); // Debug log
     const tagConfig = {
-      'Událost ISVS': { color: '#ffc107', textColor: '#000' },
-      'Akce eGovernmentu': { color: '#28a745', textColor: '#fff' },
-      'Veřejná událost': { color: '#17a2b8', textColor: '#fff' },
-      'Legislativní událost': { color: '#6f42c1', textColor: '#fff' },
-      'veřejná událost': { color: '#17a2b8', textColor: '#fff' },
-      'legislativní událost': { color: '#6f42c1', textColor: '#fff' },
-      'událost ISVS': { color: '#ffc107', textColor: '#000' }
+      'Událost ISVS': { 
+        color: '#FEF7C3', 
+        textColor: '#6B4A0D', 
+        icon: (
+          <svg width="16" height="16" viewBox="0 0 24 24">
+            <circle cx="12" cy="12" r="3" fill="none" stroke="#ffc107" strokeWidth="2"/>
+            <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z" fill="none" stroke="#ffc107" strokeWidth="2"/>
+          </svg>
+        )
+      },
+      'Odstávky': { 
+        color: '#FDE3E3', 
+        textColor: '#6B4A0D', 
+        icon: (
+          <svg width="16" height="16" viewBox="0 0 24 24">
+            <circle cx="12" cy="12" r="10" fill="none" stroke="#6B4A0D" strokeWidth="2"/>
+            <line x1="8" y1="8" x2="16" y2="16" stroke="#6B4A0D" strokeWidth="2"/>
+            <line x1="16" y1="8" x2="8" y2="16" stroke="#6B4A0D" strokeWidth="2"/>
+          </svg>
+        )
+      },
+      'Veřejná událost': { 
+        color: '#17a2b8', 
+        textColor: '#fff',
+        icon: '👥'  // Simple emoji for now
+      },
+      'Akce eGovernmentu': { 
+        color: '#28a745', 
+        textColor: '#fff',
+        icon: '💻'  // Simple emoji for now
+      },
+      'Riziko A': { 
+        color: '#28a745', 
+        textColor: '#fff', 
+        icon: (
+          <svg width="16" height="16" viewBox="0 0 24 24">
+            <path d="M12 2L2 20h20L12 2z" fill="#fff"/>
+          </svg>
+        )
+      },
+      'Riziko B': { 
+        color: '#ffc107', 
+        textColor: '#000', 
+        icon: (
+          <svg width="16" height="16" viewBox="0 0 24 24">
+            <path d="M12 2L2 20h20L12 2z" fill="#000"/>
+          </svg>
+        )
+      },
+      'Riziko C': { 
+        color: '#dc3545', 
+        textColor: '#fff', 
+        icon: (
+          <svg width="16" height="16" viewBox="0 0 24 24">
+            <path d="M12 2L2 20h20L12 2z" fill="#fff"/>
+          </svg>
+        )
+      }
     };
 
     const config = tagConfig[category as keyof typeof tagConfig] || { color: '#6c757d', textColor: '#fff' };
+    console.log('Tag config:', config); // Debug log
     
     return (
       <span style={{
         ...styles.tag,
         backgroundColor: config.color,
-        color: config.textColor
+        color: config.textColor,
+        display: 'inline-flex',
+        alignItems: 'center',
+        gap: '4px'
       }}>
+        {config.icon && <span style={{ fontSize: '14px', lineHeight: 1 }}>{config.icon}</span>}
         {category}
       </span>
     );
@@ -77,22 +142,55 @@ export const EventsList: React.FC<EventsListProps> = ({ events, loading, onEvent
 
   const getRiskTag = (riskLevel: string) => {
     if (!riskLevel) return null;
+    console.log('Rendering risk tag:', riskLevel); // Debug log
     
     const riskConfig = {
-      'A': { color: '#28a745', textColor: '#fff', label: 'Riziko A' },
-      'B': { color: '#ffc107', textColor: '#000', label: 'Riziko B' },
-      'C': { color: '#dc3545', textColor: '#fff', label: 'Riziko C' }
+      'A': { 
+        color: '#28a745', 
+        textColor: '#fff', 
+        label: 'Riziko A',
+        icon: (
+          <svg width="16" height="16" viewBox="0 0 24 24">
+            <path d="M12 2L2 20h20L12 2z" fill="#fff"/>
+          </svg>
+        )
+      },
+      'B': { 
+        color: '#ffc107', 
+        textColor: '#000', 
+        label: 'Riziko B',
+        icon: (
+          <svg width="16" height="16" viewBox="0 0 24 24">
+            <path d="M12 2L2 20h20L12 2z" fill="#000"/>
+          </svg>
+        )
+      },
+      'C': { 
+        color: '#dc3545', 
+        textColor: '#fff', 
+        label: 'Riziko C',
+        icon: (
+          <svg width="16" height="16" viewBox="0 0 24 24">
+            <path d="M12 2L2 20h20L12 2z" fill="#fff"/>
+          </svg>
+        )
+      }
     };
 
     const config = riskConfig[riskLevel as keyof typeof riskConfig];
     if (!config) return null;
+    console.log('Risk config:', config); // Debug log
     
     return (
       <span style={{
         ...styles.tag,
         backgroundColor: config.color,
-        color: config.textColor
+        color: config.textColor,
+        display: 'inline-flex',
+        alignItems: 'center',
+        gap: '4px'
       }}>
+        {config.icon && <span style={{ fontSize: '14px', lineHeight: 1 }}>{config.icon}</span>}
         {config.label}
       </span>
     );
@@ -104,10 +202,10 @@ export const EventsList: React.FC<EventsListProps> = ({ events, loading, onEvent
       return (
         <span style={{
           ...styles.tag,
-          backgroundColor: '#dc3545',
-          color: '#fff'
+           backgroundColor: '#FDE3E3',
+           color: '#6B4A0D'
         }}>
-          Odstávka
+          Odstávky
         </span>
       );
     }
@@ -172,8 +270,23 @@ export const EventsList: React.FC<EventsListProps> = ({ events, loading, onEvent
   return (
     <div style={styles.container}>
       <div style={styles.header}>
-        <h2 style={styles.title}>Plánované události</h2>
-        <div style={styles.count}>{events.length} událostí</div>
+        <div style={styles.headerLeft}>
+          <h2 style={styles.title}>Plánované události</h2>
+          <div style={styles.count}>{events.length} událostí</div>
+        </div>
+        <div style={styles.headerRight}>
+          <div style={styles.sortingSection}>
+            <span style={styles.sortLabel}>Řazení:</span>
+            <select 
+              style={styles.sortSelect}
+              value={sortOrder}
+              onChange={(e) => onSortOrderChange(e.target.value as 'newest' | 'oldest')}
+            >
+              <option value="newest">Od nejnovějších</option>
+              <option value="oldest">Od nejstarších</option>
+            </select>
+          </div>
+        </div>
       </div>
 
       <div style={styles.eventsList}>
@@ -300,19 +413,50 @@ const styles = {
     justifyContent: 'space-between',
     alignItems: 'center',
     padding: '20px',
+    paddingLeft: '0px',
     borderBottom: '1px solid #eee',
     backgroundColor: '#f8f9fa'
   },
+  headerLeft: {
+    display: 'flex',
+    flexDirection: 'column' as const,
+    gap: '8px'
+  },
+  headerRight: {
+    display: 'flex',
+    alignItems: 'center'
+  },
   title: {
     margin: '0',
-    fontSize: '20px',
+    fontSize: '24px',
     fontWeight: '600',
     color: '#333'
   },
   count: {
+    marginTop: '30px',
     fontSize: '14px',
-    color: '#666',
-    fontWeight: '500'
+    color: '#333',
+    fontWeight: '400'
+  },
+  sortingSection: {
+    display: 'flex',
+    alignItems: 'center',
+    marginTop: '60px',
+    gap: '8px'
+  },
+  sortLabel: {
+    fontSize: '14px',
+    fontWeight: '600',
+    color: '#609352'
+  },
+  sortSelect: {
+    padding: '4px 8px',
+    border: '0px solid #ddd',
+    borderRadius: '4px',
+    fontSize: '14px',
+    fontWeight: '700',
+    color: '#609352',
+    backgroundColor: '#F6F6F6'
   },
   eventsList: {
     backgroundColor: '#F5F5F5',
@@ -398,11 +542,13 @@ const styles = {
     marginBottom: '8px'
   },
   tag: {
-    padding: '3px 8px',
-    borderRadius: '12px',
+    display: 'inline-flex',
+    alignItems: 'center',
+    padding: '4px 8px',
+    borderRadius: '4px',
     fontSize: '12px',
     fontWeight: '500',
-    display: 'inline-block'
+    gap: '4px'
   },
   additionalInfo: {
     display: 'flex',
@@ -441,5 +587,14 @@ const styles = {
     height: '16px',
     color: 'currentColor',
     marginRight: '6px'
+  },
+  tagIcon: {
+    width: '16px',
+    height: '16px',
+    marginRight: '4px',
+    display: 'inline-block',
+    verticalAlign: 'middle',
+    position: 'relative' as const,
+    top: '-1px'
   }
 }; 
